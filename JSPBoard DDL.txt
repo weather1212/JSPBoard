@@ -1,0 +1,10 @@
+SQL> CREATE TABLE BBS(
+  2  bbsID number(5) constraint BBS_bbsID_pk primary key,
+  3  bbsTitle varchar2(50),
+  4  userID varchar2(20),
+  5  bbsContent varchar2(4000),
+  6  bbsDate date,
+  7  bbsViewCount number(5) constraint BBS_bbsViewCount_ck check(bbsViewCount >= 0),
+  8  bbsAvailable char(1) constraint BBS_bbsAvailable_ck check(bbsAvailable in('0','1')));
+
+Table created.
