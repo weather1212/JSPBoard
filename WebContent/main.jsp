@@ -36,7 +36,10 @@
 			%>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"
-					role="button" aria-haspopup="true" aria-expanded="false">접속하기<span class="caret"></span></a>
+						role="button" aria-haspopup="true" aria-expanded="false">
+						접속하기
+						<span class="caret"></span>
+					</a>
 					<ul class="dropdown-menu">
 						<li><a href="login.jsp">로그인</a></li>
 						<li><a href="join.jsp">회원가입</a></li>
@@ -47,7 +50,10 @@
 			%>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"
-					role="button" aria-haspopup="true" aria-expanded="false">회원관리<span class="caret"></span></a>
+						role="button" aria-haspopup="true" aria-expanded="false">
+						회원관리
+						<span class="caret"></span>
+					</a>
 					<ul class="dropdown-menu">
 						<li><a href="logoutAction.jsp">로그아웃</a></li>
 					</ul></li>
@@ -65,6 +71,33 @@
 				<a class="btn btn-primary btn-pull" href="#">채팅하러가기</a>
 			</div>
 		</div>
+	</div>
+	<div class="container">
+		<div id="myCarousel" class="carousel slide" data-ride="cacrousel">
+			<ol class="carousel-indicators">
+				<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+				<li data-target="#myCarousel" data-slide-to="1"></li>
+				<li data-target="#myCarousel" data-slide-to="2"></li>
+			</ol>
+			<div class="carousel-inner">
+				<div class="item active">
+					<img alt="" src="images/1.jpg">
+				</div>
+				<div class="item">
+					<img alt="" src="images/2.jpg">
+				</div>
+				<div class="item">
+					<img alt="" src="images/3.jpg">
+				</div>
+			</div>
+			<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+				<span class="glyphicon glyphicon-chevron-left"></span>
+			</a>
+			<a class="right carousel-control " href="#myCarousel" data-slide="next">
+				<span class="glyphicon glyphicon-chevron-right"></span>
+			</a>
+		</div>
+
 	</div>
 
 

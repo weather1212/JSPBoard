@@ -1,3 +1,4 @@
+<%@page import="java.util.HashMap"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="bbs.BbsDAO"%>
@@ -11,6 +12,46 @@
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="css/custom.css">
 <title>JSP게시판 웹사이트</title>
+<style type="text/css">
+.search {
+	margin: 50px;
+}
+</style>
+<script type="text/javascript">
+	window.onload = function() {
+		function getParameterByName(name) {
+			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex
+					.exec(location.search);
+			return results == null ? "" : decodeURIComponent(results[1]
+					.replace(/\+/g, " "));
+		}
+		const opt = getParameterByName("opt");
+		const condition = getParameterByName("condition");
+		console.log(opt, condition);
+
+		const comboBox = document.getElementsByClassName("comboBox")[0];
+		const inputCondition = document
+				.getElementsByClassName("inputCondition")[0];
+
+		if (condition != null) {
+			inputCondition.setAttribute("value", condition);
+		}
+
+		console.log("selected = "
+				+ comboBox.children[0].getAttribute("selected"));
+		if (comboBox.children[0].getAttribute("selected") == "selected") {
+			inputCondition.setAttribute("value", "");
+			inputCondition.setAttribute("readonly", "");
+		}
+		for (var i = 0; i < comboBox.children.length; i++) {
+			if (comboBox.children[i].value === opt) {
+				comboBox.children[i].setAttribute('selected', '')
+			}
+		}
+
+	}
+</script>
 <style type="text/css">
 a, a:hover {
 	color: black;
@@ -28,6 +69,23 @@ a, a:hover {
 		if (request.getParameter("pageNumber") != null) {
 			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
 		}
+
+		// 검색조건과 검색내용을 가져옴
+		String opt = request.getParameter("opt");
+		if (request.getParameter("opt") == null) {
+			opt = "0";
+		}
+
+		String condition = request.getParameter("condition");
+		if (request.getParameter("condition") == null) {
+			condition = "";
+		}
+
+		// 검색조건과 내용을 Map에 담음
+		HashMap<String, Object> listOpt = new HashMap<String, Object>();
+		listOpt.put("opt", opt);
+		listOpt.put("condition", condition);
+		listOpt.put("pageNumber", pageNumber);
 	%>
 	<nav class="navbar navbar-default">
 		<div class="navbar-header">
@@ -49,7 +107,10 @@ a, a:hover {
 			%>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"
-					role="button" aria-haspopup="true" aria-expanded="false">접속하기<span class="caret"></span></a>
+						role="button" aria-haspopup="true" aria-expanded="false">
+						접속하기
+						<span class="caret"></span>
+					</a>
 					<ul class="dropdown-menu">
 						<li><a href="login.jsp">로그인</a></li>
 						<li><a href="join.jsp">회원가입</a></li>
@@ -60,7 +121,10 @@ a, a:hover {
 			%>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"
-					role="button" aria-haspopup="true" aria-expanded="false">회원관리<span class="caret"></span></a>
+						role="button" aria-haspopup="true" aria-expanded="false">
+						회원관리
+						<span class="caret"></span>
+					</a>
 					<ul class="dropdown-menu">
 						<li><a href="logoutAction.jsp">로그아웃</a></li>
 					</ul></li>
@@ -71,6 +135,27 @@ a, a:hover {
 		</div>
 	</nav>
 	<div class="container">
+		<div class="search row">
+			<form>
+				<div class="col-xs-2 col-sm-2">
+					<select class="form-control comboBox" name="opt">
+						<option value="0">----</option>
+						<option value="1">제목</option>
+						<option value="2">내용</option>
+						<option value="3">제목+내용</option>
+						<option value="4">글쓴이</option>
+					</select>
+				</div>
+				<div class="col-xs-10 col-sm-10">
+					<div class="input-group">
+						<input type="text" size="20" name="condition" class="form-control inputCondition" />
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-default">검색</button>
+						</span>
+					</div>
+				</div>
+			</form>
+		</div>
 		<div class="row">
 			<table class="table table-striped"
 				style="text-align: center; border: 1px solid #dddddd">
@@ -86,7 +171,7 @@ a, a:hover {
 				<tbody>
 					<%
 						BbsDAO bbsDAO = new BbsDAO();
-						ArrayList<Bbs> list = bbsDAO.getList(pageNumber);
+						ArrayList<Bbs> list = bbsDAO.getList(listOpt);
 						for (int i = 0; i < list.size(); i++) {
 					%>
 					<tr>
@@ -108,25 +193,24 @@ a, a:hover {
 			<%
 				if (pageNumber != 1) {
 			%>
-			<a href="bbs.jsp?pageNumber=<%=pageNumber - 1%>" class="btn btn-success btn-arraw-left">이전</a>
+			<a href="bbs.jsp?pageNumber=<%=pageNumber - 1%>&opt=<%=opt%>&condition=<%=condition%>"
+				class="btn btn-success btn-arraw-left">이전</a>
 			<%
 				}
 				if (bbsDAO.nextPage(pageNumber + 1)) {
 			%>
-			<a href="bbs.jsp?pageNumber=<%=pageNumber + 1%>" class="btn btn-success btn-arraw-left">다음</a>
+			<a href="bbs.jsp?pageNumber=<%=pageNumber + 1%>&opt=<%=opt%>&condition=<%=condition%>"
+				class="btn btn-success btn-arraw-left">다음</a>
 			<%
 				}
 			%>
 			<a href="write.jsp" class="btn btn-primary pull-right">글쓰기</a>
 		</div>
 
+
+
 	</div>
-
-
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>
-
-
-
 </body>
 </html>
